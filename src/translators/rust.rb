@@ -88,7 +88,7 @@ module Translators
           ''
         end
         "#{param_name.variable_case}: #{var}#{type}"
-      end.join('; ')
+      end.join(', ')
     end
 
     #
