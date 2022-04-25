@@ -48,8 +48,7 @@ module Translators
       'enum'            => 'i32',
       'char'            => 'u8',
       'unsigned char'   => 'u8',
-      'string'          => '&str',
-      'typealias'       => 'type'
+      'string'          => '&str'
     }
 
     # Not being picked up by the translator. Need to investigate.
@@ -64,8 +63,6 @@ module Translators
     # Generate a Rust type signature from a SK function
     #
     def signature_syntax(function, function_name, parameter_list, return_type, opts = {})
-      puts "LIST"
-      puts parameter_list
       func_suffix = " -> #{return_type}" if is_func?(function)
       "fn #{function_name}(#{parameter_list})#{func_suffix}"
     end
@@ -82,6 +79,8 @@ module Translators
     def parameter_list_syntax(parameters, type_conversion_fn, opts = {})
       parameters.map do |param_name, param_data|
         type = send(type_conversion_fn, param_data)
+        puts "TYPE: "
+        puts type
         var = if param_data[:is_reference]
           '&mut ' # param_data[:is_const] ? '* const ' : '* mut '
         else
@@ -110,22 +109,24 @@ module Translators
     # Handle any explicitly mapped data types
     #
     def type_exceptions(type_data, type_conversion_fn, opts = {})
-      puts type_conversion_fn
       # Handle void pointer
-      return 'c_void_p' if void_pointer?(type_data)
+      return 'c_void' if void_pointer?(type_data)
 
+      if function_pointer?(type_data)
+        #puts type_data
+      end
       # Handle function pointer
-      return 'c_void_p' if function_pointer?(type_data)
+      return type_data[:type] if function_pointer?(type_data)
 
       # Handle generic pointer
-      return "^#{type}" if type_data[:is_pointer]
+      return "&#{type_data[:type]}" if type_data[:is_pointer]
+
       # Handle vectors as Array of <T>
       if vector_type?(type_data)
         return "__sklib_vector_#{type_data[:type_parameter]}" if opts[:is_lib]
         return "List<#{send(type_conversion_fn, type_data[:type_parameter])}>"
       end
 
-      puts 'NEITHER'
       # No exception for this type
       return nil
     end
