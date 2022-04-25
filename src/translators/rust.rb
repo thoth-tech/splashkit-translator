@@ -44,19 +44,22 @@ module Translators
       'byte'            => 'u8',
       'unsigned int'    => 'u32',
       'unsigned short'  => 'u16',
-      'bool'            => 'bool',
+      
       'enum'            => 'i32',
       'char'            => 'u8',
       'unsigned char'   => 'u8',
-      'string'          => '&str'
+      'string'          => '&\'static str'
     }
 
     # Not being picked up by the translator. Need to investigate.
     SK_TYPES_TO_RUST_TYPES = {
+      'bool'            => 'bool'
     }
 
     SK_TYPES_TO_LIB_TYPES = {
       # Might need to add string to String standard
+      'string'          => '&\'astr',
+      'bool'            => 'i32'
     }
 
     #
@@ -119,7 +122,7 @@ module Translators
       return type_data[:type] if function_pointer?(type_data)
 
       # Handle generic pointer
-      return "&#{type_data[:type]}" if type_data[:is_pointer]
+      return "&a'#{type_data[:type]}" if type_data[:is_pointer]
 
       # Handle vectors as Array of <T>
       if vector_type?(type_data)
