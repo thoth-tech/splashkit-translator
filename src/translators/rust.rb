@@ -43,26 +43,29 @@ module Translators
       'double'          => 'f64',
       'byte'            => 'u8',
       'unsigned int'    => 'u32',
-      'unsigned short'  => 'u16'
+      'unsigned short'  => 'u16',
+      'bool'            => 'bool',
+      'enum'            => 'i32',
+      'char'            => 'u8',
+      'unsigned char'   => 'u8',
+      'string'          => '&str',
+      'typealias'       => 'type'
+    }
+
+    # Not being picked up by the translator. Need to investigate.
+    SK_TYPES_TO_RUST_TYPES = {
     }
 
     SK_TYPES_TO_LIB_TYPES = {
-      'bool'      => 'i32',
-      'enum'      => 'i32',
-      'char'      => 'u8',
-      'unsigned char'   => 'u8',
-    }
-
-    SK_TYPES_TO_RUST_TYPES = {
-      'bool'      => 'bool',
-      'char'      => 'char',
-      'unsigned char'   => 'char',
+      # Might need to add string to String standard
     }
 
     #
     # Generate a Rust type signature from a SK function
     #
     def signature_syntax(function, function_name, parameter_list, return_type, opts = {})
+      puts "LIST"
+      puts parameter_list
       func_suffix = " -> #{return_type}" if is_func?(function)
       "fn #{function_name}(#{parameter_list})#{func_suffix}"
     end
@@ -107,8 +110,46 @@ module Translators
     # Handle any explicitly mapped data types
     #
     def type_exceptions(type_data, type_conversion_fn, opts = {})
+      puts type_conversion_fn
+      # Handle void pointer
+      return 'c_void_p' if void_pointer?(type_data)
+
+      # Handle function pointer
+      return 'c_void_p' if function_pointer?(type_data)
+
+      # Handle generic pointer
+      return "^#{type}" if type_data[:is_pointer]
+      # Handle vectors as Array of <T>
+      if vector_type?(type_data)
+        return "__sklib_vector_#{type_data[:type_parameter]}" if opts[:is_lib]
+        return "List<#{send(type_conversion_fn, type_data[:type_parameter])}>"
+      end
+
+      puts 'NEITHER'
       # No exception for this type
       return nil
+    end
+
+#
+    # Syntax for declaring array
+    #
+    def array_declaration_syntax(array_type, dim1_size, dim2_size = nil)
+      if dim2_size.nil?
+        "#{array_type} * #{dim1_size}"
+      else
+        "(#{array_type} * #{dim2_size}) * #{dim1_size}"
+      end
+    end
+
+    #
+    # Syntax for accessing array
+    #
+    def array_at_index_syntax(idx1, idx2 = nil)
+      if idx2.nil?
+        "[#{idx1}]"
+      else
+        "[#{idx1}][#{idx2}]"
+      end
     end
 
   end
