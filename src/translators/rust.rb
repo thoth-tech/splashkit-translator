@@ -44,7 +44,6 @@ module Translators
       'byte'            => 'u8',
       'unsigned int'    => 'u32',
       'unsigned short'  => 'u16',
-      
       'enum'            => 'i32',
       'char'            => 'u8',
       'unsigned char'   => 'u8',
@@ -67,7 +66,7 @@ module Translators
     #
     def signature_syntax(function, function_name, parameter_list, return_type, opts = {})
       func_suffix = " -> #{return_type}" if is_func?(function)
-      "fn #{function_name}(#{parameter_list})#{func_suffix}"
+      "fn #{function_name}<'a>(#{parameter_list})#{func_suffix}"
     end
 
     def sk_function_name_for(function)
@@ -82,10 +81,8 @@ module Translators
     def parameter_list_syntax(parameters, type_conversion_fn, opts = {})
       parameters.map do |param_name, param_data|
         type = send(type_conversion_fn, param_data)
-        puts "TYPE: "
-        puts type
         var = if param_data[:is_reference]
-          '&mut ' # param_data[:is_const] ? '* const ' : '* mut '
+          "&'a mut " # param_data[:is_const] ? '* const ' : '* mut '
         else
           ''
         end
@@ -99,7 +96,7 @@ module Translators
     def argument_list_syntax(arguments)
       args = arguments.map do | arg_data |
         if arg_data[:param_data][:is_reference] # && ! arg_data[:param_data][:is_const]
-          "&mut #{arg_data[:name]}"
+          "&'a mut #{arg_data[:name]}"
         else
           arg_data[:name]
         end
@@ -122,7 +119,7 @@ module Translators
       return type_data[:type] if function_pointer?(type_data)
 
       # Handle generic pointer
-      return "&a'#{type_data[:type]}" if type_data[:is_pointer]
+      return "&`a'#{type_data[:type]}" if type_data[:is_pointer]
 
       # Handle vectors as Array of <T>
       if vector_type?(type_data)
