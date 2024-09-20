@@ -15,11 +15,6 @@ public class <%= class_name %> : PointerWrapper
 {
   private <%= class_name %>(IntPtr ptr) : base(ptr, true) {}
 
-  /// <summary>
-  /// Fetches or creates an instance of <%= class_name %> from the given pointer.
-  /// </summary>
-  /// <param name="ptr">The pointer to the SplashKit resource.</param>
-  /// <returns>An instance of <%= class_name %>.</returns>
   internal static <%= class_name %> FetchOrCreate(IntPtr ptr)
   {
     #pragma warning disable CS8603
@@ -67,9 +62,6 @@ public static class <%= class_name %>
       fn = the_class[:destructor]
       method_data = get_method_data(fn)
 %>
-    /// <summary>
-    /// Frees the resources held by this instance of <%= class_name %>.
-    /// </summary>
     protected internal override void DoFree()
     {
         SplashKit.<%= fn[:name].function_case %>(this);
