@@ -789,8 +789,10 @@ class Parser::HeaderFileParser
           next_el = result[i+1]
           next unless next_el
           if next_el.name == 'declaration_number'
+            # Is the constant negative?
+            minus_sign = (parsed.next_sibling&.text&.strip&.[](-1)) == '-' ? -1 : 1
             # This number matches the constant
-            constants[constant_name][:number] = next_el.text.to_i
+            constants[constant_name][:number] = next_el.text.to_i * minus_sign
           end
         end
       end
