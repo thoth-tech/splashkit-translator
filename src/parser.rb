@@ -790,7 +790,14 @@ class Parser::HeaderFileParser
           next unless next_el
           if next_el.name == 'declaration_number'
             # Is the constant negative?
-            minus_sign = (parsed.next_sibling&.text&.strip&.[](-1)) == '-' ? -1 : 1
+            # Generally, next_sibling will contain '='which assigns the number to
+            # a particular enum. 
+            # When this is negative next_sibling will be of the form '= -'. 
+            # So if  next_sibling exists and has text, we need to check the last 
+            # character and if it's a negative sign then we assign -1 and correct 
+            # the enums value when we assign it in the next line.
+            # The & ensures the value at that point is not nil.
+            minus_sign = (parsed.next_sibling&.text&.strip[-1]) == '-' ? -1 : 1
             # This number matches the constant
             constants[constant_name][:number] = next_el.text.to_i * minus_sign
           end
