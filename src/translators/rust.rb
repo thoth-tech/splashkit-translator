@@ -75,6 +75,19 @@ module Translators
       "#{pub}#{unsafe}#{extern}fn #{function_name}(#{parameter_list})#{return_type}"
     end
 
+    def argument_list_syntax(arguments)
+      args = arguments.map do |arg_data|
+        var = arg_data[:name].variable_case
+        var = "r##{var}" if var == 'fn'
+        if arg_data[:param_data][:is_reference] && !arg_data[:param_data][:is_const]
+          "&mut #{var}"
+        else
+          var
+        end
+      end
+      args.join(', ')
+    end
+
     def sk_function_name_for(function)
       "#{function[:name].function_case}#{function[:attributes][:suffix].nil? ? '' : '_'}#{function[:attributes][:suffix]}"
     end
@@ -88,7 +101,9 @@ module Translators
 
     def parameter_syntax(param_name, param_data, type_conversion_fn = :sk_type_for)
       var = param_name.variable_case
-      "#{var == 'fn' ? 'r#fn' : var}: #{send(type_conversion_fn, param_data)}"
+      type = send(type_conversion_fn, param_data)
+      param_data[:is_reference] && !param_data[:is_const] && type = "&mut #{type}"
+      "#{var == 'fn' ? 'r#fn' : var}: #{type}"
     end
 
     def struct_field_syntax(field_name, field_type, field_data)
