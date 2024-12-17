@@ -35,7 +35,6 @@
     end
 %>
 <%
-    # Write back any non-const reference parameters (for both cases)
     function[:parameters].each do |param_name, param_data|
       if param_data[:is_reference] && !param_data[:is_const]
 %>

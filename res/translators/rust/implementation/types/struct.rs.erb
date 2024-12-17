@@ -22,7 +22,7 @@ impl __sklib_<%= struct[:name] %> {
         unsafe { uninit.assume_init() }
     }
 }
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct <%= struct[:name].to_pascal_case %> {
 <%
     struct[:fields].each do |field_name, field_data|
@@ -33,10 +33,18 @@ pub struct <%= struct[:name].to_pascal_case %> {
     end
 %>
 }
+impl Default for <%= struct[:name].to_pascal_case %> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 impl <%= struct[:name].to_pascal_case %> {
     pub fn new() -> Self {
         let uninit = MaybeUninit::zeroed();
         unsafe { uninit.assume_init() }
+    }
+    pub fn is_null(&self) -> bool {
+        *self == Self::default()
     }
 }
 <%
