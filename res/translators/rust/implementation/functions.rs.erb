@@ -11,8 +11,16 @@
       param_var = param_name.to_s.to_snake_case
       # Escape 'fn' keyword if needed
       param_var = "r##{param_var}" if param_var == 'fn'
+      if param_data[:is_reference] && !param_data[:is_const]
 %>
-    let __skparam__<%= param_name %> = <%= lib_mapper_fn_for param_data %>(<%= param_var %>);
+    let mut __skparam__<%= param_name.to_s.to_snake_case %> = <%= lib_mapper_fn_for param_data %>((*<%= param_var %>).clone());
+<%
+      else
+%>
+    let __skparam__<%= param_name.to_s.to_snake_case %> = <%= lib_mapper_fn_for param_data %>(<%= param_var %>);
+<%
+      end
+%>
 <%
     end
 %>

@@ -15,15 +15,19 @@
     end.join(", ")
 %>
 
-static <%= fp[:name].type_case.upcase %>: OnceLock<Box<dyn Fn(<%= param_types %>) -> <%= return_type %> + Send + Sync>> = OnceLock::new();
+static <%= fp[:name].type_case.upcase %>_WRAPPER: OnceLock<Box<dyn Fn(<%= param_types %>) -> <%= return_type %> + Send + Sync>> = OnceLock::new();
 
-impl <%= fp[:name].type_case %> {
+pub struct <%= fp[:name].type_case %>Wrapper {
+    callback: Box<dyn Fn(<%= param_types %>) -> <%= return_type %> + Send + Sync>
+}
+
+impl <%= fp[:name].type_case %>Wrapper {
     pub fn new<F>(callback: F) -> <%= fp[:name].type_case %>
     where
         F: Fn(<%= param_types %>) -> <%= return_type %> + Send + Sync + 'static
     {
         let boxed_callback = Box::new(callback);
-        <%= fp[:name].type_case.upcase %>.get_or_init(|| boxed_callback);
+        <%= fp[:name].type_case.upcase %>_WRAPPER.get_or_init(|| boxed_callback);
         
         extern "C" fn wrapper_fn(
 <%
@@ -34,7 +38,7 @@ impl <%= fp[:name].type_case %> {
     end
 %>
         ) -> <%= return_type %> {
-            if let Some(callback) = <%= fp[:name].type_case.upcase %>.get() {
+             if let Some(callback) = <%= fp[:name].type_case.upcase %>_WRAPPER.get() {
                 callback(
 <%
     fp[:parameters].each_with_index do |(param_name, param_data), index|
