@@ -2,7 +2,7 @@ require_relative 'abstract_translator'
 require_relative 'translator_helper'
 
 module Translators
-  # Rust translator class that converts SplashKit code to Rust
+  # SplashKit Rust Library code generator
   class Rust < AbstractTranslator
     include TranslatorHelper
 
@@ -10,6 +10,9 @@ module Translators
       super(data, logging)
     end
 
+    #
+    # Generate the splashkit module
+    #
     def render_templates
       {
         'splashkit.rs' => read_template('splashkit.rs'),
@@ -26,6 +29,9 @@ module Translators
       constants:  :upper_case
     }
 
+    #
+    # Direct type map primitive data types between the adapter and library code.
+    #
     DIRECT_TYPES = {
       'int8_t'          => 'i8',
       'int'             => 'i32',

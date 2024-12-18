@@ -113,6 +113,7 @@ module Translators
       result
     end
 
+
     def get_method_data(fn)
       {
         method_name: fn[:name].to_s.to_pascal_case,
