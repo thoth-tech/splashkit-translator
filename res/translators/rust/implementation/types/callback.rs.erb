@@ -17,9 +17,7 @@
 
 static <%= fp[:name].type_case.upcase %>_WRAPPER: OnceLock<Box<dyn Fn(<%= param_types %>) -> <%= return_type %> + Send + Sync>> = OnceLock::new();
 
-pub struct <%= fp[:name].type_case %>Wrapper {
-    callback: Box<dyn Fn(<%= param_types %>) -> <%= return_type %> + Send + Sync>
-}
+pub struct <%= fp[:name].type_case %>Wrapper;
 
 impl <%= fp[:name].type_case %>Wrapper {
     pub fn new<F>(callback: F) -> <%= fp[:name].type_case %>
