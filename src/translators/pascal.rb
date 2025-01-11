@@ -119,5 +119,9 @@ module Translators
         "[#{idx1},#{idx2}]"
       end
     end
+
+    def comparison_statement(field_name, is_last)
+      "(left.#{field_name} = right.#{field_name})#{is_last ? ';' : ' and'}"
+    end
   end
 end

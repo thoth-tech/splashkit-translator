@@ -39,14 +39,14 @@ module Translators
       'unsigned short'  => 'c_ushort'
     }
     SK_TYPES_TO_PYTHON_TYPES = {
-      'bool'      => 'bool',
-      'string'    => 'str',
-      'char'      => 'char',
+      'bool'            => 'bool',   
+      'string'          => 'str',
+      'char'            => 'char',
       'unsigned char'   => 'ubyte',
     }
     SK_TYPES_TO_LIB_TYPES = {
       'string'    => '_sklib_string',
-      'bool'      => 'c_bool',
+      'bool'      => 'c_int32',
       'char'      => 'c_char',
       'enum'      => 'c_int',
       'unsigned char'   => 'c_ubyte',
@@ -156,6 +156,14 @@ module Translators
       else
         "[#{idx1}][#{idx2}]"
       end
+    end
+
+    def field_name_for(field_name, field_data)
+      field_data[:is_array] || @enums.any? { |e| e[:name] == field_data[:type] } ? "_#{field_name}" : field_name
+    end
+
+    def comparison_statement(field_name, is_last)
+      "self.#{field_name} == other.#{field_name}#{is_last ? '' : ' and'}"
     end
   end
 end
