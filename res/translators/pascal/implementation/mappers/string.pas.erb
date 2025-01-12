@@ -15,6 +15,6 @@ begin
 end;
 function __skadapter__to_string(s: __sklib_string): String;
 begin
-  result := StrPas(s.str);
+  result := String(s.str);
   __sklib__free__sklib_string(s);
 end;
