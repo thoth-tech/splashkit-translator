@@ -53,10 +53,10 @@
 
     public static bool operator ==(<%=struct[:name].to_pascal_case()%> lhs, <%=struct[:name].to_pascal_case()%> rhs)
     {
-        return Math.Abs(lhs.r - rhs.r) < 0.004 &&
-               Math.Abs(lhs.g - rhs.g) < 0.004 &&
-               Math.Abs(lhs.b - rhs.b) < 0.004 &&
-               Math.Abs(lhs.a - rhs.a) < 0.004;
+        return Math.Abs(lhs.R - rhs.R) < 0.004 &&
+               Math.Abs(lhs.G - rhs.G) < 0.004 &&
+               Math.Abs(lhs.B - rhs.G) < 0.004 &&
+               Math.Abs(lhs.A - rhs.A) < 0.004;
     }
 
     public static bool operator !=(<%=struct[:name].to_pascal_case()%> lhs, <%=struct[:name].to_pascal_case()%> rhs)
@@ -64,7 +64,7 @@
         return !(lhs == rhs);
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is <%=struct[:name].to_pascal_case()%>)
             return this == (<%=struct[:name].to_pascal_case()%>)obj;
@@ -73,7 +73,7 @@
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(r, g, b, a);
+        return HashCode.Combine(R, G, B, A);
     }
 <%
     end # end color equality check
