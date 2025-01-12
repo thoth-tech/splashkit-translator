@@ -163,7 +163,11 @@ module Translators
     end
 
     def comparison_statement(field_name, is_last)
-      "self.#{field_name} == other.#{field_name}#{is_last ? '' : ' and'}"
+      if %w[r g b a].include?(field_name.downcase)
+        "abs(self.#{field_name} - other.#{field_name}) < 0.004#{is_last ? '' : ' and'}"
+      else
+        "self.#{field_name} == other.#{field_name}#{is_last ? '' : ' and'}"
+      end
     end
   end
 end

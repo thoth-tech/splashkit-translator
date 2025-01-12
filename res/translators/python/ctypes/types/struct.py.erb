@@ -63,6 +63,7 @@ class <%= sklib_prefix() %>_<%= struct[:name].variable_case %>(Structure):
         return (
 <%  struct[:fields].each_with_index do |(field_name, field_data), idx|
       is_last = idx == struct[:fields].length - 1
+      field_name = field_name.field_case
       sk_comparison_for(field_name, field_data, is_last).each do |comparison| %>
             <%= comparison %><%= "\n" %>
 <%    end %>
