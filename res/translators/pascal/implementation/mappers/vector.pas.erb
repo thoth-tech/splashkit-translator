@@ -52,7 +52,6 @@ function __skadapter__to_sklib_vector_<%= type %>(const v: ArrayOf<%= sk_type %>
 var
     i: Integer;
 begin
-  result := nil;
   result.size_from_lib := 0;
   result.data_from_lib := nil;
   result.size_from_app := Length(v);
