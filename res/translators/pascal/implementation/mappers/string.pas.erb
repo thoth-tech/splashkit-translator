@@ -15,6 +15,7 @@ begin
 end;
 function __skadapter__to_string(s: __sklib_string): String;
 begin
-  result := String(s.str);
+  SetLength(result, strlen(s.str));
+  Move(s.str^, result[1], strlen(s.str));
   __sklib__free__sklib_string(s);
 end;
