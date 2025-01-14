@@ -39,7 +39,7 @@ class <%= sklib_prefix() %>_<%= struct[:name].variable_case %>(Structure):
     ]
 
     def __init__(self):
-      super().__init__()
+        super().__init__()
 
 <%
     struct[:fields].each do |field_name, field_data|
@@ -76,7 +76,10 @@ class <%= sklib_prefix() %>_<%= struct[:name].variable_case %>(Structure):
 %>
     @property
     def <%= field_name %>(self):
-        return  _FieldIndexer(self, "_<%= field_name %>", <%=dim1%>, <%=dim2%>)
+        indexer_name = "_<%= field_name %>_indexer"
+        if not hasattr(self, indexer_name):
+            setattr(self, indexer_name, _FieldIndexer(self, "_<%= field_name %>", <%=dim1%>, <%=dim2%>))
+        return getattr(self, indexer_name)
 <%
       end # if
     end # fields each
