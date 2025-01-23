@@ -1,0 +1,21 @@
+<%#
+    Function pointer type definitions
+%>
+<%
+  @function_pointers.each do |fp|
+    return_type = if is_func?(fp)
+      sk_type_for(fp[:return])
+    else
+      "()"
+    end
+
+    params = fp[:parameters].map do |param_name, param_data|
+      type = sk_type_for(param_data)
+      type
+    end.join(", ")
+%>
+pub type <%= fp[:name].type_case %> = Box<dyn Fn(<%= params %>) -> <%= return_type %> + Send + Sync>;
+pub type __sklib_<%= fp[:name].to_snake_case %> = extern "C" fn(<%= params %>) -> <%= return_type %>;
+<%
+  end
+%>

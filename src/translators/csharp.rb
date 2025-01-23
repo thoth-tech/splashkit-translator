@@ -112,7 +112,7 @@ module Translators
 
       result
     end
-  
+
 
     def get_method_data(fn)
       {
