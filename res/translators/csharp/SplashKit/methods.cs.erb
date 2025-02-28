@@ -19,13 +19,14 @@
     is_constructor = !function[:attributes][:constructor].nil?
 %>
     /// <summary>
-    /// <%= (function[:description] || "").gsub("\n", " ") %> 
+    /// <%= (function[:description] || "").gsub("\n", " ") %>
+
     /// </summary>
 <% function[:parameters].each do |param_name, param_data| %>
     /// <param name="<%= param_name %>"> <%= (param_data[:description] || "").gsub("\n", " ") %></param>
 <% end %>
 <% if is_func?(function) %>
-    /// <returns><%= (function[:return][:description] || "").gsub("\n", " ") %>.</returns>
+    /// <returns><%= (function[:return][:description] || "").gsub("\n", " ") %></returns>
 <% end %>
     <%= sk_signature_for(function) %>
 

@@ -53,7 +53,7 @@ public static class <%= class_name %>
 <% fn[:parameters].each do |param_name, param_data| %>
     /// <param name="<%= param_name %>"> <%= (param_data[:description] || "").gsub("\n", " ") %></param>
 <% end %>
-    public <%= class_name %>(<%= method_data[:params] %>) : base(SplashKit.<%= fn[:name].function_case %>(<%= method_data[:args] %>), false)
+    public <%= class_name %>(<%= method_data[:params] %>) : base ( SplashKit.<%= fn[:name].function_case %>(<%= method_data[:args] %>), false )
     { }
 <%
     end # constructors.each
@@ -80,8 +80,8 @@ public static class <%= class_name %>
       return_type = is_func?(fn) ? sk_type_for(fn[:return]) : 'void'
 %>
     /// <summary>
-    /// Calls the <%= fn[:name].to_s.to_pascal_case %> method for <%= class_name %>.
     /// <%= (fn[:description] || "").gsub("\n", " ") %>
+
     /// </summary>
 <% fn[:parameters].each do |param_name, param_data| %>
     /// <param name="<%= param_name %>"> <%= (param_data[:description] || "").gsub("\n", " ") %></param>
@@ -115,6 +115,7 @@ public static class <%= class_name %>
     /// Gets or sets the <%= property_name.to_s.to_pascal_case %> property of the <%= class_name %>.
     /// </summary>
     public <%= method_data[:static] %><%= property_type %> <%= property_name.to_s.to_pascal_case %>
+
     {
 <%
       if property[:getter]
