@@ -39,7 +39,7 @@ module Translators
       'unsigned short'  => 'c_ushort'
     }
     SK_TYPES_TO_PYTHON_TYPES = {
-      'bool'            => 'bool',   
+      'bool'            => 'bool',
       'string'          => 'str',
       'char'            => 'char',
       'unsigned char'   => 'ubyte',

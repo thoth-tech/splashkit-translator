@@ -179,7 +179,7 @@ module Translators
 
     def comparison_statement(field_name, is_last)
       if %w[r g b a].include?(field_name)
-        "abs(lhs.#{field_name} - rhs.#{field_name}) < 0.004#{is_last ? ';' : ' &&'}"
+        "std::abs(lhs.#{field_name} - rhs.#{field_name}) < 0.004#{is_last ? ';' : ' &&'}"
       else
         "lhs.#{field_name} == rhs.#{field_name}#{is_last ? ';' : ' &&'}"
       end

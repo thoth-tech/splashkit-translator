@@ -6,7 +6,7 @@
 %>
 operator = (const left, right: <%= struct[:name].type_case %>): Boolean;
 begin
-  result := 
+  result :=
 <%  struct[:fields].each_with_index do |(field_name, field_data), idx|
       is_last = idx == struct[:fields].length - 1
       field_name = field_name.field_case
