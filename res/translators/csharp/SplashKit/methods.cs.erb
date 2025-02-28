@@ -23,7 +23,7 @@
 
     /// </summary>
 <% function[:parameters].each do |param_name, param_data| %>
-    /// <param name="<%= param_name %>"> <%= (param_data[:description] || "").gsub("\n", " ") %></param>
+    /// <param name="<%= param_name.variable_case %>"> <%= (param_data[:description] || "").gsub("\n", " ") %></param>
 <% end %>
 <% if is_func?(function) %>
     /// <returns><%= (function[:return][:description] || "").gsub("\n", " ") %></returns>

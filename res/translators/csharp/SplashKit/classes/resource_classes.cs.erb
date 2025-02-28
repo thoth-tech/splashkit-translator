@@ -51,7 +51,7 @@ public static class <%= class_name %>
     /// Creates a new instance of <%= class_name %> using the provided parameters.
     /// </summary>
 <% fn[:parameters].each do |param_name, param_data| %>
-    /// <param name="<%= param_name %>"> <%= (param_data[:description] || "").gsub("\n", " ") %></param>
+    /// <param name="<%= param_name.variable_case %>"> <%= (param_data[:description] || "").gsub("\n", " ") %></param>
 <% end %>
     public <%= class_name %>(<%= method_data[:params] %>) : base ( SplashKit.<%= fn[:name].function_case %>(<%= method_data[:args] %>), false )
     { }
@@ -83,8 +83,10 @@ public static class <%= class_name %>
     /// <%= (fn[:description] || "").gsub("\n", " ") %>
 
     /// </summary>
-<% fn[:parameters].each do |param_name, param_data| %>
-    /// <param name="<%= param_name %>"> <%= (param_data[:description] || "").gsub("\n", " ") %></param>
+<% fn[:parameters].select { |param_name|
+        param_name.to_s != fn[:attributes][:self]
+    }.each do |param_name, param_data| %>
+    /// <param name="<%= param_name.variable_case %>"> <%= (param_data[:description] || "").gsub("\n", " ") %></param>
 <% end %>
 <% if is_func?(fn) %>
     /// <returns><%= (fn[:return][:description] || "").gsub("\n", " ") %>.</returns>
