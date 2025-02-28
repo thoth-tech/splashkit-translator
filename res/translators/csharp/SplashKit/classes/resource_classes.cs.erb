@@ -89,7 +89,7 @@ public static class <%= class_name %>
     /// <param name="<%= param_name.variable_case %>"> <%= (param_data[:description] || "").gsub("\n", " ") %></param>
 <% end %>
 <% if is_func?(fn) %>
-    /// <returns><%= (fn[:return][:description] || "").gsub("\n", " ") %>.</returns>
+    /// <returns><%= (fn[:return][:description] || "").gsub("\n", " ") %></returns>
 <% end %>
     public <%= method_data[:static] %><%= return_type %> <%= fn[:attributes][:method].function_case %>(<%= method_data[:params] %>)
     {
