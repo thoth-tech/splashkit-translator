@@ -136,7 +136,7 @@ module Translators
     end
 
     def post_execute
-      puts 'Place `api.json` and `SplashKit.Generated.cs` in the `data` directory of the `splashkit.io` repo'
+      puts 'Place `splashKitMethods.generated.js` and `SplashKitBindings.Generated.cs` in `generated/csharpwasm` of the `splashkit-core` repo'
     end
 
     private
