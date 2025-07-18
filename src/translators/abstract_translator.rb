@@ -10,7 +10,7 @@ module Translators
                .to_h
   end
   def adapters
-    all.select { |c| ![:CLIB, :DOCS].include? c }.values
+    all.select { |c| ![:CLIB, :DOCS, :CSHARPWASM].include? c }.values
   end
   module_function :all
   module_function :adapters

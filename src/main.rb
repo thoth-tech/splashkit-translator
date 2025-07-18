@@ -13,6 +13,7 @@ require_relative 'translators/csharp'
 require_relative 'translators/cpp'
 # require_relative 'translators/rust'
 require_relative 'translators/docs'
+require_relative 'translators/csharpwasm'
 
 # Access to config vars
 include Config
